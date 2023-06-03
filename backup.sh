@@ -36,18 +36,23 @@ configure_smtp() {
             echo "Creating config file: $config_file"
 
             cat <<EOT > "$config_file"
+#配置文件路径 $config_file
+#待备份文件夹：$wwwroot
+#备份存放路径：$backup_dir
 
 #STML_CONFIG_START#
-send_email_enabled="no" #是否启用发送邮件功能 可选值 yes no
-custom_subject="xxx主机的Typecho数据库和usr备份"
+
+#--------邮箱stmp---------
+send_email_enabled="no" #发送邮件开关 yes no
+custom_subject="xxx主机的备份"
 smtp_address="smtp.gmail.com"
 smtp_port="587"
 smtp_user="user@gmail.com"
-smtp_password="password"111
+smtp_password="password"
 recipient_email="recipient@example.com"
-smtp_tls="on"
+#默认使用tls！
 
-#数据库信息
+#--------数据库---------
 db_host="127.0.0.1"
 db_user="root"
 db_password="password"
@@ -55,6 +60,7 @@ db_name="typecho"
 
 update_period="1" #时间间隔单位天
 last_backup_time=""
+
 #STML_CONFIG_END#
 
 EOT
