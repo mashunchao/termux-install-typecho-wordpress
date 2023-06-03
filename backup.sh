@@ -245,16 +245,15 @@ start_backup() {
     #备份完成后更新上次备份时间
     last_backup_time=$(date +"$date_format")
     sed -i "s|last_backup_time=.*|last_backup_time=\"$last_backup_time\"|" "$config_file"
-    echo -e "Typecho 数据库和 upload 文件夹备份完成！\n"
 
-    echo -e "保存路径 $backup_zip\n"
+    echo -e "备份完成！保存路径 $backup_zip\n"
 
     file_size=$(ls -lh --block-size=1M $backup_zip | awk '{printf $5}')
     echo "压缩包大小（1MB的倍数）: ${file_size}MB"
     if [[ "$file_size" -gt "25" ]]; then
-    	echo "文件超过25MB"
+    	echo -e "${red}文件超过25MB\n ${font}"
     else
-	echo "文件未超过25MB"
+	echo -e "文件未超过25MB\n"
     fi
 	
     # 清理过期备份文件
