@@ -246,13 +246,13 @@ start_backup() {
     #备份完成后更新上次备份时间
     last_backup_time=$(date +"$date_format")
     sed -i "s|last_backup_time=.*|last_backup_time=\"$last_backup_time\"|" "$config_file"
-    echo "Typecho 数据库和 upload 文件夹备份完成！\n"
+    echo -e "Typecho 数据库和 upload 文件夹备份完成！\n"
 
     echo -e "保存路径 $backup_dir\n"
     
     echo -e "压缩包大小"
     file_size=$(ls -lh --block-size=1MB $backup_dir | awk '{print $5}')
-    if (( $(echo "$file_size > 25" | bc -l) )); then
+    if [[ "$file_size" > "25" ]]; then
     	echo -e "压缩包大小 $file_size"
     	echo "压缩包大小超过25MB，请注意！"
     else
