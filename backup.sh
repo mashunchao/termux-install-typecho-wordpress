@@ -216,8 +216,7 @@ start_backup() {
     # 定义过期备份时间（7 天）
     expire_time=$(date -d "7 days ago" +"$date_format")
 
-    echo -e "当前系统时间:\n"
-    LANG=zh_CN.UTF-8 date +"%Y年%m月%d日 %H时%M分%S秒"
+    echo -e "当前系统时间:$(LANG=zh_CN.UTF-8 date +"%Y年%m月%d日 %H时%M分%S秒")\n"
 
     # 备份数据库
     echo -e "备份数据库...\n"
@@ -249,7 +248,7 @@ start_backup() {
     echo -e "Typecho 数据库和 upload 文件夹备份完成！\n"
 
     echo -e "保存路径 $backup_zip\n"
-    
+
     file_size=$(ls -lh --block-size=1M $backup_zip | awk '{printf $5}')
     echo "压缩包大小（1MB的倍数）: ${file_size}MB"
     if [[ "$file_size" -gt "25" ]]; then
