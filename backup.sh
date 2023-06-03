@@ -169,8 +169,7 @@ send_email() {
 
     # 循环尝试发送邮件，直到成功或达到最大重试次数
     while [ $retry_attempts -lt $max_retry ]; do
-        #cat $email_message | msmtp --from=$sender_email --host=$smtp_server --tls=$smtp_tls --tls-certcheck=off --port=$smtp_port --auth=on --user=$smtp_user --passwordeval="echo $smtp_password" $recipient_email
-        cat $email_message | msmtp --from=jfuugghcuc@gmail.com --host=smtp.gmail.com --port=587 --tls=on --tls-starttls=on --auth=on --user=jfuugghcuc@gmail.com --passwordeval="echo pngwujvctbeppnxp" $recipient_email
+        cat $email_message | msmtp --from=$sender_email --host=$smtp_server --port=$smtp_port --tls=on --tls-starttls=on --auth=on  --port=$smtp_port  --user=$smtp_user --passwordeval="echo $smtp_password" $recipient_email
         if [ $? -eq 0 ]; then
             echo "邮件发送成功！"
             break
