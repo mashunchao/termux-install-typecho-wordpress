@@ -250,20 +250,14 @@ start_backup() {
 
     echo -e "保存路径 $backup_zip\n"
     
-    file_size=$(ls -lh --block-size=1M $backup_zip | awk '{printf "%.1f", $5}')
-	echo "压缩包大小: ${file_size}MB"
-	
-    echo -e "压缩包大小"
-    ls -lh --block-size=1MB $backup_zip | awk '{print $5}'
-    file_size=$(ls -lh --block-size=1MB $backup_zip | awk '{print $5}')
-    if [[ "$file_size" > "25" ]]; then
-    	echo -e "压缩包大小 $file_size"
-    	echo "压缩包大小超过25MB，请注意！"
+    file_size=$(ls -lh --block-size=1M $backup_zip | awk '{printf $5}')
+    echo "压缩包大小（1MB的倍数）: ${file_size}MB"
+    if [[ "$file_size" -gt "25" ]]; then
+    	echo "文件超过25MB"
     else
-    	echo -e "压缩包大小 $file_size"
-	echo "压缩包大小小于25MB"
+	echo "文件未超过25MB"
     fi
-
+	
     # 清理过期备份文件
     echo "查询清理过期备份文件（7 天）..."
     if ! find "$backup_dir" -name "*.sql" -mtime +"$expire_time" -type f -delete; then
