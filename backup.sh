@@ -61,6 +61,9 @@ db_name="typecho"
 update_period="1" #时间间隔单位天
 last_backup_time=""
 
+#--------环境---------
+#zip、msmtp、unzip
+
 #STML_CONFIG_END#
 
 EOT
