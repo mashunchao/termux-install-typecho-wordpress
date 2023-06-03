@@ -14,7 +14,7 @@ config_file="$HOME/www/blog.conf"
 wwwroot=$HOME/www/typecho/usr/uploads
 
 # 定义备份保存目录
-backup_dir="$HOME/typecho_backup"
+backup_dir="$HOME/www/typecho_backup"
 
 if [ -f "$config_file" ]; then
     #导入配置文件中的变量
