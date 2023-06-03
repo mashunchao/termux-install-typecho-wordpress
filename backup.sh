@@ -228,14 +228,14 @@ start_backup() {
     #备份wwwroot文件夹
     echo "备份uploads文件夹..."
     uploads_backup_dir="$backup_dir/uploads_backup_$(date +$date_format)"
-    if ! cp -R $wwwroot "$usr_backup_dir"; then
+    if ! cp -R $wwwroot "$uploads_backup_dir"; then
         echo "usr 文件夹备份失败！"
         return 1
     fi
 
     # 压缩备份文件
     echo "压缩数据库备份和uploads文件夹..."
-    backup_zip="$backup_dir/backup_$(date +$date_format).sql"
+    backup_zip="$backup_dir/backup_$(date +$date_format).zip"
     if ! zip -r "$backup_zip" "$db_backup_file" "$uploads_backup_dir"; then
         echo "备份文件压缩失败！"
         return 1
@@ -262,8 +262,9 @@ start_backup() {
     fi
 
     # 清理临时备份文件
-    rm -rf "$usr_backup_dir"
-
+    rm -rf "$uploads_backup_dir"
+ 			rm "$db_backup_file"
+	
     # 判断是否启用发送邮件功能
     if [[ "$send_email_enabled" == "yes" ]]; then
         # 定义附件路径
@@ -272,7 +273,7 @@ start_backup() {
         echo "正在发邮件"
         send_email "$attachment_path"
     else
-        echo "你选择不通过邮件服务，如果需要，请在配置选项选择(yes)"
+        echo "\n你选择不通过邮件服务，如果需要，请在配置文件选项选择(yes)"
     fi
 }
 
