@@ -189,7 +189,7 @@ send_email() {
     rm $email_message
 }
 
-#执行备份
+#执行备份 
 start_backup() {
 
     #导入配置文件中的变量
