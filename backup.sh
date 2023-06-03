@@ -248,11 +248,14 @@ start_backup() {
     sed -i "s|last_backup_time=.*|last_backup_time=\"$last_backup_time\"|" "$config_file"
     echo -e "Typecho 数据库和 upload 文件夹备份完成！\n"
 
-    echo -e "保存路径 $backup_dir\n"
+    echo -e "保存路径 $backup_zip\n"
     
+    file_size=$(ls -lh --block-size=1M $backup_zip | awk '{printf "%.1f", $5}')
+	echo "压缩包大小: ${file_size}MB"
+	
     echo -e "压缩包大小"
-    ls -lh --block-size=1MB $backup_dir | awk '{print $5}'
-    file_size=$(ls -lh --block-size=1MB $backup_dir | awk '{print $5}')
+    ls -lh --block-size=1MB $backup_zip | awk '{print $5}'
+    file_size=$(ls -lh --block-size=1MB $backup_zip | awk '{print $5}')
     if [[ "$file_size" > "25" ]]; then
     	echo -e "压缩包大小 $file_size"
     	echo "压缩包大小超过25MB，请注意！"
