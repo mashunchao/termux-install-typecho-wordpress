@@ -13,6 +13,9 @@ config_file="$HOME/www/blog.conf"
 #待备份文件夹路径
 wwwroot=$HOME/www/typecho/usr/uploads
 
+# 定义备份保存目录
+backup_dir="$HOME/typecho_backup"
+
 if [ -f "$config_file" ]; then
     #导入配置文件中的变量
     source "$config_file"
@@ -33,7 +36,6 @@ configure_smtp() {
             echo "Creating config file: $config_file"
 
             cat <<EOT > "$config_file"
-#路径$HOME/www/blog.conf
 
 #STML_CONFIG_START#
 send_email_enabled="no" #是否启用发送邮件功能 可选值 yes no
@@ -199,9 +201,6 @@ start_backup() {
         echo "配置文件未找到 请先配置 Config file not found: $config_file"
     fi
 
-    # 定义备份保存目录
-    backup_dir="$HOME/typecho_backup"
-
     # 创建备份目录(如果不存在)
     mkdir -p "$backup_dir"
 
@@ -217,8 +216,11 @@ start_backup() {
     # 定义过期备份时间（7 天）
     expire_time=$(date -d "7 days ago" +"$date_format")
 
+    echo "当前系统时间."
+    LANG=zh_CN.UTF-8 date +"%Y年%m月%d日 %H时%M分%S秒"
+
     # 备份数据库
-    echo "备份数据库..."
+    echo -e "备份数据库...\n"
     db_backup_file="$backup_dir/db_backup_$(date +$date_format).sql"
     if ! mysqldump -h "$db_host" -u "$db_user" -p"$db_password" "$db_name" > "$db_backup_file"; then
         echo "数据库备份失败！，别忘了开启web（数据库） 服务才可以进行备份"
@@ -226,7 +228,7 @@ start_backup() {
     fi
 
     #备份wwwroot文件夹
-    echo "备份uploads文件夹..."
+    echo -e "备份uploads文件夹...\n"
     uploads_backup_dir="$backup_dir/uploads_backup_$(date +$date_format)"
     if ! cp -R $wwwroot "$uploads_backup_dir"; then
         echo "usr 文件夹备份失败！"
@@ -234,7 +236,7 @@ start_backup() {
     fi
 
     # 压缩备份文件
-    echo "压缩数据库备份和uploads文件夹...\n"
+    echo -e "压缩数据库备份和uploads文件夹...\n"
     backup_zip="$backup_dir/backup_$(date +$date_format).zip"
     if ! zip -rj "$backup_zip" "$db_backup_file" "$uploads_backup_dir"; then
         echo "备份文件压缩失败！"
@@ -244,7 +246,9 @@ start_backup() {
     #备份完成后更新上次备份时间
     last_backup_time=$(date +"$date_format")
     sed -i "s|last_backup_time=.*|last_backup_time=\"$last_backup_time\"|" "$config_file"
-    echo "Typecho 数据库和 usr 文件夹备份完成！"
+    echo "Typecho 数据库和 upload 文件夹备份完成！\n"
+
+    echo -e "保存路径 $backup_dir\n"
 
     # 清理过期备份文件
     echo "查询清理过期备份文件（7 天）..."
