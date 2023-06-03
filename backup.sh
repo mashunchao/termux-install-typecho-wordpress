@@ -216,7 +216,7 @@ start_backup() {
     # 定义过期备份时间（7 天）
     expire_time=$(date -d "7 days ago" +"$date_format")
 
-    echo "当前系统时间."
+    echo -e "当前系统时间:\n"
     LANG=zh_CN.UTF-8 date +"%Y年%m月%d日 %H时%M分%S秒"
 
     # 备份数据库
@@ -249,6 +249,16 @@ start_backup() {
     echo "Typecho 数据库和 upload 文件夹备份完成！\n"
 
     echo -e "保存路径 $backup_dir\n"
+    
+    echo -e "压缩包大小"
+    file_size=$(ls -lh --block-size=1MB $backup_dir | awk '{print $5}')
+    if (( $(echo "$file_size > 25" | bc -l) )); then
+    	echo -e "压缩包大小 $file_size"
+    	echo "压缩包大小超过25MB，请注意！"
+    else
+    	echo -e "压缩包大小 $file_size"
+	echo "压缩包大小小于25MB"
+    fi
 
     # 清理过期备份文件
     echo "查询清理过期备份文件（7 天）..."
@@ -267,7 +277,7 @@ start_backup() {
 
     # 清理临时备份文件
     rm -rf "$uploads_backup_dir"
- 			rm "$db_backup_file"
+    rm "$db_backup_file"
 	
     # 判断是否启用发送邮件功能
     if [[ "$send_email_enabled" == "yes" ]]; then
@@ -277,7 +287,7 @@ start_backup() {
         echo "正在发邮件"
         send_email "$attachment_path"
     else
-        echo "\n你选择不通过邮件服务，如果需要，请在配置文件选项选择(yes)"
+        echo -e "\n你选择不通过邮件服务，如果需要，请在配置文件选项打开开关选项(yes)"
     fi
 }
 
@@ -295,7 +305,7 @@ show_menu() {
 handle_menu_choice() {
     case $1 in
         1)
-													start_backup
+	    start_backup
             ;;
         2)
             echo -e "${cyan}---------------------------------"
