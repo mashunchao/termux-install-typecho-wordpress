@@ -234,7 +234,7 @@ start_backup() {
     fi
 
     # 压缩备份文件
-    echo "压缩数据库备份和uploads文件夹..."
+    echo "压缩数据库备份和uploads文件夹...\n"
     backup_zip="$backup_dir/backup_$(date +$date_format).zip"
     if ! zip -r "$backup_zip" "$db_backup_file" "$uploads_backup_dir"; then
         echo "备份文件压缩失败！"
