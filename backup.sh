@@ -251,6 +251,7 @@ start_backup() {
     echo -e "保存路径 $backup_dir\n"
     
     echo -e "压缩包大小"
+    ls -lh --block-size=1MB $backup_dir | awk '{print $5}'
     file_size=$(ls -lh --block-size=1MB $backup_dir | awk '{print $5}')
     if [[ "$file_size" > "25" ]]; then
     	echo -e "压缩包大小 $file_size"
