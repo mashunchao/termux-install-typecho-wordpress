@@ -282,7 +282,7 @@ show_menu() {
     echo "1. 开启备份/发送邮件(需配置)"
     echo "2. 查看配置文件"
     echo "3. 创建、更改配置文件"
-    echo "4. 返回上级菜单"
+    echo "4. 退出"
     read -p "请选择一个选项: " choice
     handle_menu_choice "$choice"
 }
