@@ -291,8 +291,7 @@ show_menu() {
 handle_menu_choice() {
     case $1 in
         1)
-            
-									    start_backup
+													start_backup
             ;;
         2)
             echo -e "${cyan}---------------------------------"
