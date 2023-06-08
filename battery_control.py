@@ -39,7 +39,8 @@ elif args.start:
     battery_low_threshold = 50  # 电池电量低于此阈值时，打开插座
     battery_high_threshold = 90  # 电池电量高于此阈值时，关闭插座
     temperature_threshold = 40  # 电池温度高于此阈值时，关闭插座
-
+    
+    print("开始自动检测并开关服务...")
     # 运行自动开关逻辑
     while True:
         battery_data = get_battery_info()
@@ -47,8 +48,10 @@ elif args.start:
         battery_temp = battery_data['temperature']
 
         if battery_level < battery_low_threshold:
+            print("当前电量低于{battery_low_threshold}，打开插座")
             toggle_gosund_plug(ip, token, True)  # 打开插座
         elif battery_level > battery_high_threshold or battery_temp > temperature_threshold:
+            print("当前电量高于{battery_high_threshold}，或温度高于{temperature_threshold}，关闭插座")
             toggle_gosund_plug(ip, token, False)  # 关闭插座
 
         time.sleep(60)  # 每隔60秒检查一次电池电量和温度
